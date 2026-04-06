@@ -42,7 +42,7 @@ echo $SHELL
 
 ## ✅ 수행 항목 체크리스트
 
-* [ ] STEP 3: 터미널 조작 로그 기록
+* [x] 터미널 조작 로그 기록
 * [ ] STEP 4: 파일 권한 실습
 * [ ] STEP 5: Docker 설치 및 점검
 * [ ] STEP 6: 컨테이너 기본 실행
@@ -76,9 +76,10 @@ ai-dev-workstation/
 
 ## 🔍 검증 방법 및 결과
 
-> 각 STEP 완료 후 아래에 검증 내용을 추가합니다.
+* 터미널 조작 로그 기록 완료 → [terminal-logs.md](logs/terminal-logs.md)<br>
+mkdir -p 로 디렉토리 구조 생성<br>
+절대경로 / 상대경로 실습 완료
 
-* STEP 3: (작성 예정)
 * STEP 4: (작성 예정)
 * STEP 5: (작성 예정)
 * STEP 6: (작성 예정)
@@ -106,7 +107,15 @@ ai-dev-workstation/
 
 ### 1. 절대 경로 vs 상대 경로
 
-* (STEP 3 완료 후 작성)
+* **절대 경로**: 루트(/)부터 시작하는 전체 경로<br>
+예: cd ~/ai-dev-workstation/logs<br>
+어디서 실행해도 동일한 위치로 이동<br>
+
+* **상대 경로**: 현재 위치 기준으로 작성하는 경로<br>
+예: cd logs / cd ..<br>
+현재 위치에 따라 결과가 달라짐<br>
+
+* **핵심 명령어**: `pwd` (현재 위치 확인) / `cd` (디렉토리 이동) / `ls -la` (목록 확인)
 
 ---
 
