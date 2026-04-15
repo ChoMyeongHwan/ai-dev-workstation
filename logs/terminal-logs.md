@@ -24,6 +24,39 @@ pwd
 # 6. logs에 terminal-logs.md 파일 생성
 touch terminal-logs.md
 
+# 7. 파일 내용 확인
+cat app.log -> (아무 내용 없음)
+
+# 8. 파일 복사
+cp app.log app_copy.log
+
+# 9. 이름 변경
+mv app_copy.log renamed.log
+
+# 10. 디렉토리로 이동
+mv renamed.log ../ -> 상위 디렉토리로 이동
+
+# 11. 파일 삭제
+rm renamed.log
+
+# 12. 디렉토리 삭제
+# -r → 디렉토리 내부까지 삭제
+rm -r logs
+
 ```
 
+## 핵심 요약
+```
+pwd        → 현재 위치
+ls -al     → 목록 확인(숨김 포함)
+cd         → 이동
+mkdir      → 생성
+cp         → 복사
+mv         → 이동/이름변경
+rm         → 삭제
+cat/less   → 내용 확인
+touch      → 빈 파일 생성
+```
+
+## 주요 명령어 실행 확인
 ![terminal-logs.png](screenshots/terminal-logs.png)
