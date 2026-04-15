@@ -43,7 +43,7 @@ echo $SHELL
 ## ✅ 수행 항목 체크리스트
 
 * [x] 터미널 조작 로그 기록
-* [ ] STEP 4: 파일 권한 실습
+* [x] 파일 권한 실습
 * [ ] STEP 5: Docker 설치 및 점검
 * [ ] STEP 6: 컨테이너 기본 실행
 * [ ] STEP 7: 커스텀 이미지 제작
@@ -80,7 +80,11 @@ ai-dev-workstation/
 mkdir -p 로 디렉토리 구조 생성<br>
 절대경로 / 상대경로 실습 완료
 
-* STEP 4: (작성 예정)
+* 파일 권한 실습 완료 → [permission-test.md](evidence/permission-test.md)<br>
+chmod 755 실행 파일 권한 설정<br>
+chmod 644 문서 파일 권한 설정<br>
+permission denied 에러 vs 정상 실행 비교 확인
+
 * STEP 5: (작성 예정)
 * STEP 6: (작성 예정)
 * STEP 7: (작성 예정)
@@ -121,7 +125,10 @@ mkdir -p 로 디렉토리 구조 생성<br>
 
 ### 2. 파일 권한 (r/w/x, 755, 644)
 
-* (STEP 4 완료 후 작성)
+* `r`(읽기=4) / `w`(쓰기=2) / `x`(실행=1)<br>
+`755` → rwxr-xr-x : 실행 파일, 스크립트에 사용<br>
+`644` → rw-r--r-- : 문서, 설정 파일에 사용<br>
+`chmod 755 파일명` 으로 권한 변경
 
 ---
 
