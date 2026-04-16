@@ -172,6 +172,56 @@ docker volume create ai-data 볼륨 생성<br>
 
 ---
 
+### 3. 포트 충돌 오류
+- 문제:
+  - 동일한 호스트 포트(8080)로 컨테이너를 2개 실행하려 할 때 두 번째 컨테이너가 실행되지 않음
+
+- 원인 가설:
+  - 호스트의 8080 포트가 이미 첫 번째 컨테이너(web-first)에 점유됨
+  - 하나의 포트는 동시에 하나의 프로세스만 사용 가능
+  - 기존 컨테이너를 중지하지 않은 상태에서 동일 포트로 재실행 시도
+
+- 확인 방법
+  ```zsh
+  # 실행 중인 컨테이너 및 포트 점유 확인
+  docker ps
+
+  # 호스트에서 포트 점유 프로세스 확인 (Mac/Linux)
+  lsof -i :8080
+  
+  ```
+
+- 오류 재현
+  ```zsh
+  # 첫 번째 컨테이너 실행 (8080 점유)
+  docker run -d --name web-first -p 8080:80 nginx
+
+  # 동일 포트로 두 번째 컨테이너 실행 시도
+  docker run -d --name web-second -p 8080:80 nginx
+  # 💥 Error response from daemon:
+  # driver failed programming external connectivity on endpoint web-second:
+  # Bind for 0.0.0.0:8080 failed: port is already allocated.
+
+  ```
+
+- 해결 방법
+  ```zsh
+  # 방법 1: 다른 포트 번호로 변경
+  docker run -d --name web-second -p 8081:80 nginx
+
+  # 방법 2: 기존 컨테이너 중지 후 동일 포트 재사용
+  docker stop web-first
+  docker rm web-first
+  docker run -d --name web-second -p 8080:80 nginx
+
+  ```
+
+- 결과
+  - docker ps로 각 컨테이너가 서로 다른 포트에 정상 실행됨을 확인
+  - localhost:8080, localhost:8081 각각 브라우저 접속 성공
+
+---
+
 ## 📚 학습 내용 정리
 
 ### 1. 절대 경로 vs 상대 경로
