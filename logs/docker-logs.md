@@ -32,6 +32,35 @@ docker run hello-world<br>
 | docker stop [이름] | 컨테이너 중지 |
 | docker rm [이름] | 컨테이너 삭제 |
 
+### 컨테이너 종료/유지
+#### 컨테이너는 **메인 프로세스(PID 1)** 가 살아있어야 유지된다.
+
+| 명령어 | 접속 방식 | 종료 시 컨테이너 |
+|--------|-----------|-----------------|
+| `docker run` | 새 컨테이너 생성 | 메인 프로세스 종료 → **컨테이너도 종료** |
+| `docker attach` | **메인 프로세스**에 직접 연결 | `exit` 입력 → **컨테이너 종료** ⚠️ |
+| `docker exec` | **새 프로세스** 추가 실행 | `exit` 입력 → **컨테이너 유지** ✅ |
+
+---
+
+```zsh
+# attach: 메인 프로세스에 붙음 → exit하면 컨테이너 죽음
+docker attach my_container
+
+# exec: 새 bash 실행 → exit해도 컨테이너 살아있음
+docker exec -it my_container bash
+```
+
+### attach에서 컨테이너 안 죽이고 나오려면?
+
+```
+Ctrl + P → Ctrl + Q   # 컨테이너 유지하면서 detach
+```
+
+> **`attach`** = 메인 프로세스 직접 연결 (exit → 컨테이너 종료)  
+> **`exec`** = 새 프로세스 추가 (exit → 컨테이너 유지)  
+> **실무에서는 `exec -it` 를 주로 사용!**
+
 ### 실행 결과
 - ubuntu 컨테이너 진입 및 내부 명령어 실행 확인
 - nginx 백그라운드 실행 → 중지 → 삭제 완료

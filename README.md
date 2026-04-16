@@ -44,12 +44,12 @@ echo $SHELL
 
 * [x] 터미널 조작 로그 기록
 * [x] 파일 권한 실습
-* [ ] STEP 5: Docker 설치 및 점검
-* [ ] STEP 6: 컨테이너 기본 실행
-* [ ] STEP 7: 커스텀 이미지 제작
-* [ ] STEP 8: 포트 매핑 테스트
-* [ ] STEP 9: 볼륨 영속성 검증
-* [ ] STEP 10: Git 설정 및 GitHub 연동
+* [x] Docker 설치 및 점검
+* [x] 컨테이너 기본 실행
+* [x] 커스텀 이미지 제작
+* [x] 포트 매핑 테스트
+* [x] 볼륨 영속성 검증
+* [x] Git 설정 및 GitHub 연동
 
 ---
 
@@ -76,34 +76,99 @@ ai-dev-workstation/
 
 ## 🔍 검증 방법 및 결과
 
-* 터미널 조작 로그 기록 완료 → [terminal-logs.md](logs/terminal-logs.md)<br>
+* **터미널 조작 로그 기록 완료** → [terminal-logs.md](logs/terminal-logs.md)<br>
 mkdir -p 로 디렉토리 구조 생성<br>
 절대경로 / 상대경로 실습 완료
 
-* 파일 권한 실습 완료 → [permission-test.md](evidence/permission-test.md)<br>
+* **파일 권한 실습 완료** → [permission-test.md](evidence/permission-test.md)<br>
 chmod 755 실행 파일 권한 설정<br>
 chmod 644 문서 파일 권한 설정<br>
 permission denied 에러 vs 정상 실행 비교 확인
 
-* STEP 5: (작성 예정)
-* STEP 6: (작성 예정)
-* STEP 7: (작성 예정)
-* STEP 8: (작성 예정)
-* STEP 9: (작성 예정)
-* STEP 10: (작성 예정)
+* **Docker 설치 점검 완료** → [docker-logs.md](logs/docker-logs.md)<br>
+docker info 로 시스템 정보 확인<br>
+docker run hello-world 정상 실행 확인
+
+* **컨테이너 기본 실행 완료** → [docker-logs.md](logs/docker-logs.md)<br>
+ubuntu 컨테이너 대화형 실행<br>
+nginx 백그라운드 실행 → 중지 → 삭제
+
+* **커스텀 이미지 제작 완료** → [Dockerfile](dockerfile/Dockerfile)<br>
+ubuntu:22.04 기반 커스텀 이미지 빌드<br>
+ai-workstation:v1 이미지 생성 완료
+
+* **포트 매핑 테스트 완료** → [docker-logs.md](logs/docker-logs.md)<br>
+`-p 8080:8080` 포트 매핑 설정<br>
+`curl http://localhost:8080` 응답 확인
+
+* **볼륨 영속성 검증 완료** → [volume-test.md](evidence/volume-test.md)<br>
+docker volume create ai-data 볼륨 생성<br>
+컨테이너 삭제 후 데이터 유지 확인
+
+* **Git 설정 및 GitHub 연동 완료** → [git-setup.md](evidence/git-setup.md)<br>
+전역 user.name / user.email 설정<br>
+전체 커밋 이력 기록 및 push 완료
 
 ---
 
 ## 🐛 트러블슈팅
 
-> 문제 발생 시 아래 형식으로 기록합니다.
+### 1. Git 커밋 작성자(author) 오류
+- 문제:
+  - GitHub에 push한 커밋의 작성자(name, email)가 의도한 값이 아니라 `username@hostname` 형태로 잘못 기록됨
 
-### 예시
+- 원인 가설:
+  - `git config user.name`, `git config user.email` 미설정
+  - Git이 OS의 username, hostname 기반으로 자동 생성
+  - 잘못된 author 상태로 commit 및 push 진행됨
 
-* 문제:
-* 원인 가설:
-* 확인 방법:
-* 해결 방법:
+- 해결 방법:
+    ```zsh
+    # 1. 사용자 정보 설정
+    git config --global user.name "정확한 이름"
+    git config --global user.email "GitHub 이메일"
+
+    # 2. 기존 커밋 되돌리기 (내용 유지)
+    git reset --soft HEAD~1
+
+    # 3. 다시 커밋
+    git commit -m "docs: README 기본 구조 작성"
+
+    # 4. 원격 저장소 강제 반영
+    git push origin main --force
+    
+    ```
+- 결과:
+  - 커밋 작성자가 정상적으로 수정됨
+  - GitHub에서도 올바른 사용자로 표시됨
+
+---
+
+### 2. 컨테이너에서 한글 입력 시 글자가 깨지거나 지워지는 현상
+- 문제:
+  - Ubuntu 컨테이너 내부에서 echo "한글" 입력 시 글자가 깨지거나, 입력 도중 기존 텍스트가 지워지는 현상 발생
+
+- 원인 가설:
+  - 컨테이너의 기본 로케일(locale)이 UTF-8이 아닌 C 또는 POSIX로 설정되어 있어 한글(멀티바이트 문자)을 정상 처리하지 못함
+
+- 확인 방법:
+  ```zsh
+  locale
+  ```
+
+- 해결 방법:
+  ```zsh
+  # 1. 임시 해결
+  export LANG=C.UTF-8
+
+  # 2. 영구 설정 (권장)
+  apt update
+  apt install -y locales
+  locale-gen en_US.UTF-8
+  update-locale LANG=en_US.UTF-8
+  export LANG=en_US.UTF-8
+  
+  ```
 
 ---
 
@@ -134,16 +199,23 @@ permission denied 에러 vs 정상 실행 비교 확인
 
 ### 3. Docker 포트 매핑
 
-* (STEP 8 완료 후 작성)
+* -p 호스트포트:컨테이너포트 형식으로 지정<br>
+예: -p 8080:8080 → localhost:8080 으로 컨테이너 접근<br>
+포트 매핑 없으면 외부에서 컨테이너 접근 불가
 
 ---
 
 ### 4. Docker 볼륨
 
-* (STEP 9 완료 후 작성)
+* 컨테이너 삭제 시 내부 데이터도 함께 삭제됨<br>
+볼륨 사용 시 컨테이너 외부에 데이터 저장 → 영속성 보장<br>
+-v 볼륨명:/컨테이너경로 형식으로 마운트
 
 ---
 
 ### 5. Git vs GitHub
 
-* (STEP 10 완료 후 작성)
+* Git은 코드 변경사항을 추적하는 **도구**이고,<br>
+GitHub는 그 코드를 저장하고 공유하는 **온라인 공간**이다.
+
+* Git(도구) + GitHub(저장 공간) 함께 사용
