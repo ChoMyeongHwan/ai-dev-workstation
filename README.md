@@ -323,3 +323,40 @@ docker volume create ai-data 볼륨 생성<br>
 GitHub는 그 코드를 저장하고 공유하는 **온라인 공간**이다.
 
 * Git(도구) + GitHub(저장 공간) 함께 사용
+
+---
+
+## 🎁 보너스 과제
+
+### 1. Docker Compose 기초
+- `docker run ...` 명령어는 옵션이 길어지면 복잡하고, 매번 기억하기 어려움
+- Docker Compose는 이 실행 설정을 [`compose.yml`](compose.yml)이라는 파일에 "문서화"해서 관리함
+- 누가, 언제 실행하든 항상 동일한 환경을 만들 수 있음
+
+  ```zsh
+  # ⭐ 배움 포인트: "문서화된 실행 설정"
+
+  # [Before] CLI 기반 실행 (일회성, 재사용 어려움)
+  docker run --name my-nginx -p 8080:80 -d nginx:latest
+
+
+  # [After] 선언적 설정 기반 실행 (재사용 가능, 협업 용이)
+  docker compose up -d
+  ```
+
+---
+
+### 2. Docker Compose 멀티 컨테이너
+
+---
+
+### 3. Compose 운영 명령어 습득
+
+---
+
+### 4. 환경 변수 활용
+
+---
+
+### 5. GitHub SSH 키 설정
+
