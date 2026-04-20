@@ -444,9 +444,36 @@ services:
 - `os.getenv('PORT', '8080')` 방식으로 **기본값**을 설정해두면 환경 변수가 없어도 동작한다.
 - `compose.yml`의 `environment` 섹션에서 값을 주입하면 **코드 수정 없이** 동작을 변경할 수 있다.
 - 개발(`PORT=8080`) / 테스트(`PORT=9000`) / 운영(`PORT=80`) 환경을 **설정만으로** 유연하게 적용 가능하다.
-- 이는 **12 Factor App** 방법론의 핵심 원칙 중 하나이다. *(설정은 코드가 아닌 환경에 저장하라)*
 
 ---
 
 ### 5. GitHub SSH 키 설정
+- 로컬에서 SSH 키를 생성하고 GitHub에 공개키를 등록해서 비밀번호 없이 인증하기
+- `~/.ssh/id_ed25519.pub` 공개키 생성 및 GitHub 등록
+  ```zsh
+  # 0. SSH 키 존재 여부 확인
+  ls ~/.ssh/
 
+  # 1. SSH 키 생성
+  ssh-keygen -t ed25519 -C "GitHub 가입 이메일"
+
+  # 2. 공개키 확인 (GitHub에 등록할 내용)
+  cat ~/.ssh/id_ed25519.pub
+
+  # 3. SSH 연결 테스트
+  ssh -T git@github.com
+
+  # 4. 원격 주소 확인
+  git remote -v
+
+  # 5. 원격 주소 SSH로 변경
+  git remote set-url origin git@github.com:유저명/레포명.git
+
+  ```
+
+#### ⭐ 배움 포인트: SSH 인증 원리
+- SSH 키는 **공개키 + 개인키** 한 쌍으로 이루어진다.
+- 공개키(`id_ed25519.pub`)는 GitHub에 등록하고, 개인키(`id_ed25519`)는 로컬에 보관한다.
+- GitHub 접속 시 두 키를 대조해서 자동 인증하므로 매번 비밀번호 입력이 불필요하다.
+- 공개키는 외부에 노출되어도 안전하지만, 개인키는 절대 공유하면 안 된다.
+- `git remote set-url`로 기존 HTTPS 주소를 SSH 주소로 변경하면 이후 `push/pull` 시 자동 인증된다.
