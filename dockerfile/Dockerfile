@@ -32,9 +32,15 @@ COPY app.py .
 # → . 은 WORKDIR(/app) 을 의미
 
 # ⑥ 환경변수 설정
+# ❌ 기존: ENV APP_ENV=development
+# ✅ 변경: PORT 환경 변수 기본값 설정
 ENV APP_ENV=development
-# → 컨테이너 내부에서 사용할 환경변수
-# → echo $APP_ENV 하면 "development" 출력됨
+ENV PORT=8080
+# → Dockerfile에서 기본값을 설정해두는 것
+# → docker-compose.yml에서 덮어쓰기(override) 가능
+
+# → Python 출력 버퍼링 해제 (실시간 로그 확인 위해)
+ENV PYTHONUNBUFFERED=1 
 
 # ⑦ 포트 노출 선언
 EXPOSE 8080

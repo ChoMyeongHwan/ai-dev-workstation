@@ -395,6 +395,56 @@ GitHub는 그 코드를 저장하고 공유하는 **온라인 공간**이다.
 ---
 
 ### 4. 환경 변수 활용
+- `PORT` 환경 변수를 주입해서 코드 수정 없이 서버 포트 변경하기
+- `app.py` 수정, `Dockerfile` 수정, `docker-compose.yml` 수정
+- 실행 결과
+  ```zsh
+  # 실행
+  docker compose up
+
+  # 결과
+  app-1  | 서버 시작: http://localhost:9000
+  ```
+
+### 변경 파일 요약
+
+**`app.py`**
+```python
+# ❌ 기존
+PORT = 8080
+
+# ✅ 변경
+PORT = int(os.getenv('PORT', '8080'))
+# 환경 변수 PORT가 있으면 그 값, 없으면 기본값 8080
+```
+
+**`Dockerfile`**
+```dockerfile
+# 기존 ENV에 PORT 추가
+ENV PORT=8080
+```
+
+**`compose.yml`**
+```yaml
+services:
+  app:
+    build: ./dockerfile
+    ports:
+      - "5000:9000"     # 호스트 5000 → 컨테이너 9000
+    environment:
+      - PORT=9000       # 컨테이너 안으로 주입
+      - APP_ENV=development
+```
+
+---
+
+#### ⭐ 배움 포인트: 환경 변수 분리
+
+- 환경 변수 → 컨테이너 실행 시 외부에서 주입하는 설정값
+- `os.getenv('PORT', '8080')` 방식으로 **기본값**을 설정해두면 환경 변수가 없어도 동작한다.
+- `compose.yml`의 `environment` 섹션에서 값을 주입하면 **코드 수정 없이** 동작을 변경할 수 있다.
+- 개발(`PORT=8080`) / 테스트(`PORT=9000`) / 운영(`PORT=80`) 환경을 **설정만으로** 유연하게 적용 가능하다.
+- 이는 **12 Factor App** 방법론의 핵심 원칙 중 하나이다. *(설정은 코드가 아닌 환경에 저장하라)*
 
 ---
 
