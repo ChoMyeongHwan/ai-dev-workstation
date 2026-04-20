@@ -333,9 +333,8 @@ GitHub는 그 코드를 저장하고 공유하는 **온라인 공간**이다.
 - Docker Compose는 이 실행 설정을 [`compose.yml`](compose.yml)이라는 파일에 "문서화"해서 관리함
 - 누가, 언제 실행하든 항상 동일한 환경을 만들 수 있음
 
+#### ⭐ 배움 포인트: "문서화된 실행 설정"
   ```zsh
-  # ⭐ 배움 포인트: "문서화된 실행 설정"
-
   # [Before] CLI 기반 실행 (일회성, 재사용 어려움)
   docker run --name my-nginx -p 8080:80 -d nginx:latest
 
@@ -347,8 +346,34 @@ GitHub는 그 코드를 저장하고 공유하는 **온라인 공간**이다.
 ---
 
 ### 2. Docker Compose 멀티 컨테이너
+- `alpine` 리눅스 컨테이너를 보조 서비스로 두고, 웹 서버 컨테이너를 `ping`으로 호출해서 네트워크 통신 확인하기
+- [`compose.yml`](compose.yml) 수정
+- 실행 결과
+  ```zsh
+  # 실행
+  docker compose up
 
----
+  # 결과
+  helper-1  | PING web (192.168.97.3): 56 data bytes
+  helper-1  | 64 bytes from 192.168.97.3: seq=0 ttl=64 time=0.047 ms
+  ...
+  helper-1  | 64 bytes from 192.168.97.3: seq=1 ttl=64 time=0.082 ms
+  helper-1  | 64 bytes from 192.168.97.3: seq=2 ttl=64 time=0.071 ms
+  helper-1  | 64 bytes from 192.168.97.3: seq=3 ttl=64 time=0.087 ms
+  helper-1  | 
+  helper-1  | --- web ping statistics ---
+  helper-1  | 4 packets transmitted, 4 packets received, 0% packet loss
+  helper-1  | round-trip min/avg/max = 0.047/0.071/0.087 ms
+  helper-1 exited with code 0
+
+  ```
+#### ⭐ 배움 포인트: 네트워크 & 서비스 디스커버리
+- 서비스 디스커버리 → 서비스의 위치(IP, 포트)를 동적으로 찾아주는 메커니즘
+- Docker Compose는 모든 서비스를 하나의 가상 네트워크로 자동 연결한다.
+- 컨테이너 간 통신 시 IP 대신 서비스 이름을 사용할 수 있다.
+- 내부적으로 Docker DNS가 서비스 이름 → 컨테이너 IP를 자동 매핑한다.
+- 환경이 바뀌어도(IP 변경 등) 코드 수정 없이 통신 가능하다.
+- 이는 MSA 환경에서 사용하는 서비스 디스커버리의 기본 개념이다.
 
 ### 3. Compose 운영 명령어 습득
 
