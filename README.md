@@ -375,7 +375,22 @@ GitHub는 그 코드를 저장하고 공유하는 **온라인 공간**이다.
 - 환경이 바뀌어도(IP 변경 등) 코드 수정 없이 통신 가능하다.
 - 이는 MSA 환경에서 사용하는 서비스 디스커버리의 기본 개념이다.
 
+---
+
 ### 3. Compose 운영 명령어 습득
+- `docker compose up -d`: 컨테이너들을 백그라운드에서 생성하고 실행
+- `docker compose down`: 실행 중인 컨테이너들을 중지하고 삭제(생선된 네트워크도 함께 삭제)
+- `docker compose ps`: 현재 Compose 프로젝트에 의해 실행된 컨테이너들의 상태 확인
+- `docker compose logs`: 컨테이너들의 로그를 출력
+  * `docker compose logs -f`: 실시간 로그 출력
+  * `docker compose logs web`: `web` 서비스의 로그만 출력
+
+#### ⭐ 배움 포인트: 운영 관점의 "상태 확인 루틴" 만들기
+- up -> ps -> logs -> down 이 흐름은 실제 서버를 운영할 때도 가장 기본이 되는 확인 절차
+  1. 배포/시작: up
+  2. 상태 점검: ps (잘 떠 있나?)
+  3. 문제 진단: logs (오류는 없나?)
+  4. 종료/정리: down
 
 ---
 
