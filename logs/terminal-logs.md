@@ -18,7 +18,7 @@ ls -la
 cd logs          # 상대 경로
 pwd              # 현재 위치 확인
 cd ..            # 상위로 이동
-cd ~/ai-dev-workstation/logs  # 절대 경로
+cd /ai-dev-workstation/logs  # 절대 경로(/)
 pwd
 
 # 6. logs에 terminal-logs.md 파일 생성

@@ -280,15 +280,38 @@ docker volume create ai-data 볼륨 생성<br>
 
 ### 1. 절대 경로 vs 상대 경로
 
-* **절대 경로**: 루트(/)부터 시작하는 전체 경로<br>
-예: cd ~/ai-dev-workstation/logs<br>
-어디서 실행해도 동일한 위치로 이동<br>
+#### 절대 경로(Absolute Path)
+- 루트 디렉토리(/)부터 시작하는 전체 경로
+- 시스템 내에서 항상 동일한 위치를 가리킴
+```zsh
+cd /home/username/ai-dev-workstation/logs
+```
+- 어디서 실행해도 동일한 위치로 이동
 
-* **상대 경로**: 현재 위치 기준으로 작성하는 경로<br>
-예: cd logs / cd ..<br>
-현재 위치에 따라 결과가 달라짐<br>
+---
 
-* **핵심 명령어**: `pwd` (현재 위치 확인) / `cd` (디렉토리 이동) / `ls -la` (목록 확인)
+#### 홈 디렉토리 표현 (~)
+- ~는 현재 사용자의 홈 디렉토리를 의미하는 쉘 확장 표현
+- 실행 시 실제 경로로 변환됨
+```zsh
+~ → /home/username
+cd ~/ai-dev-workstation/logs
+```
+- 위 명령은 내부적으로 아래와 동일하게 동작
+```zsh
+cd /home/username/ai-dev-workstation/logs
+```
+- 절대 경로처럼 동작하지만, 엄밀히는 /로 시작하지 않으므로 순수 절대 경로 표기와는 구분됨
+
+---
+
+#### 상대 경로 (Relative Path)
+- 현재 위치를 기준으로 작성하는 경로
+```zsh
+cd logs
+cd ..
+```
+- 현재 위치에 따라 결과가 달라짐
 
 ---
 
